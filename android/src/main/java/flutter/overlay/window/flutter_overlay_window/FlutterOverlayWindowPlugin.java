@@ -29,6 +29,8 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
+import android.view.inputmethod.InputMethodManager;
+
 
 public class FlutterOverlayWindowPlugin implements
         FlutterPlugin, ActivityAware, BasicMessageChannel.MessageHandler, MethodCallHandler,
@@ -109,6 +111,9 @@ public class FlutterOverlayWindowPlugin implements
                 result.success(true);
             }
             return;
+        } else if (call.method.equals("changeKeyboard")) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showInputMethodPicker();
         } else {
             result.notImplemented();
         }
