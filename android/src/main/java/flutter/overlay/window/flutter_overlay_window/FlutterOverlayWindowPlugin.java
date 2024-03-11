@@ -112,7 +112,7 @@ public class FlutterOverlayWindowPlugin implements
             }
             return;
         } else if (call.method.equals("changeKeyboard")) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.showInputMethodPicker();
         } else {
             result.notImplemented();
