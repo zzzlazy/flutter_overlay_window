@@ -1,5 +1,7 @@
 package flutter.overlay.window.flutter_overlay_window;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -31,6 +33,8 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 import android.view.inputmethod.InputMethodManager;
 
+import java.util.Set;
+
 
 public class FlutterOverlayWindowPlugin implements
         FlutterPlugin, ActivityAware, BasicMessageChannel.MessageHandler, MethodCallHandler,
@@ -43,8 +47,11 @@ public class FlutterOverlayWindowPlugin implements
     private Result pendingResult;
     final int REQUEST_CODE_FOR_OVERLAY_PERMISSION = 1248;
 
+    private FlutterPluginBinding flutterPluginBinding;
+
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        this.flutterPluginBinding = flutterPluginBinding;
         this.context = flutterPluginBinding.getApplicationContext();
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), OverlayConstants.CHANNEL_TAG);
         channel.setMethodCallHandler(this);
@@ -112,8 +119,11 @@ public class FlutterOverlayWindowPlugin implements
             }
             return;
         } else if (call.method.equals("changeKeyboard")) {
-            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.showInputMethodPicker();
+            // 获取当前的service： OverlayService
+            Set<String> notifications = NotificationManagerCompat.getEnabledListenerPackages(context);
+            for (String notification : notifications) {
+                Log.d("Notification", notification);
+            }
         } else {
             result.notImplemented();
         }

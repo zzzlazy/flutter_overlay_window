@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.app.PendingIntent;
 import android.graphics.Point;
+import android.inputmethodservice.InputMethodService;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -23,6 +24,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -121,6 +123,9 @@ public class OverlayService extends Service implements View.OnTouchListener {
                 int width = call.argument("width");
                 int height = call.argument("height");
                 resizeOverlay(width, height, result);
+            } else if (call.method.equals("changeKeyboard")) {
+                changeKeyboard();
+                result.success(true);
             }
         });
         overlayMessageChannel.setMessageHandler((message, reply) -> {
@@ -158,6 +163,15 @@ public class OverlayService extends Service implements View.OnTouchListener {
         return START_STICKY;
     }
 
+    public void changeKeyboard() {
+//        InputMethodManager inputMethodManager = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        inputMethodManager.showInputMethodPicker();
+//            Intent intent = new Intent(this, InputMethodPickerActivity.class);
+        Intent intent = new Intent(getApplicationContext(), InputMethodPickerActivity.class);
+        intent.putExtra("showPicker", true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getApplicationContext().startActivity(intent);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private int screenHeight() {
@@ -367,6 +381,4 @@ public class OverlayService extends Service implements View.OnTouchListener {
             });
         }
     }
-
-
 }
