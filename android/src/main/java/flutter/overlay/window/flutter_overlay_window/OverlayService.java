@@ -1,5 +1,6 @@
 package flutter.overlay.window.flutter_overlay_window;
 
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -166,11 +167,11 @@ public class OverlayService extends Service implements View.OnTouchListener {
     public void changeKeyboard() {
 //        InputMethodManager inputMethodManager = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 //        inputMethodManager.showInputMethodPicker();
-//            Intent intent = new Intent(this, InputMethodPickerActivity.class);
-        Intent intent = new Intent(getApplicationContext(), InputMethodPickerActivity.class);
+        Application context = (Application) getApplicationContext();
+        Intent intent = new Intent(this, InputMethodPickerActivity.class);
         intent.putExtra("showPicker", true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getApplicationContext().startActivity(intent);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        context.startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
